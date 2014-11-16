@@ -36,27 +36,13 @@ plot1 <- ggplot(stepdays, aes(x = steps)) + geom_histogram(binwidth = 1000, colo
 print(plot1)
 ```
 
-```{r, steps_per_day, echo=FALSE, fig.path='figure/'}
-
-library(ggplot2)
-
-plot1 <- ggplot(stepdays, aes(x = steps)) + geom_histogram(binwidth = 1000, color = "White", fill = "green3") + 
-        ggtitle("Total Steps Taken per Day") + theme(plot.title = element_text(face="bold")) + xlab("Steps Taken") + 
-        ylab ("Count")
-
-print(plot1)
-```
+![plot of chunk steps_per_day](figure/steps_per_day-1.png) 
 
 Calculate and report the mean and median total number of steps taken per day
 
 **For the total number of steps taken per day:**  
 
-```{r, echo=FALSE}
 
-mean_steps = round(mean(stepdays$steps), 2)
-median_steps = round(median(stepdays$steps), 2)
-
-```
 
 - **Mean:** 10766.19
 - **Median:** 10765
@@ -76,15 +62,7 @@ plot2 <- ggplot(stepsinterval, aes(x = interval, y = steps)) + geom_line(color="
 print(plot2)
 ```
 
-```{r, steps_interval, echo=FALSE, fig.path='figure/'}
-stepsinterval <- aggregate(dataWihtoutNA["steps"], by = dataWihtoutNA["interval"], FUN = mean)
-
-plot2 <- ggplot(stepsinterval, aes(x = interval, y = steps)) + geom_line(color="green3")+ 
-        xlab("5-minute Interval") + ylab("Average Steps Taken") + ggtitle("Average Steps Taken by 5-minute Interval") +
-        theme(plot.title = element_text(face="bold")) 
-
-print(plot2)
-```
+![plot of chunk steps_interval](figure/steps_interval-1.png) 
 
 Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -112,20 +90,7 @@ plot3 <- ggplot(stepdays2, aes(x = steps)) + geom_histogram(binwidth = 1000,
 print(plot3)
 ```
 
-```{r, filled_missing_values, echo=FALSE, fig.path='figure/'}
-dataNA <- data[apply(is.na(data), 1, any),]
-dataNA$steps <- stepsinterval$steps[match(dataNA$interval, stepsinterval$interval)]
-data2 <- rbind(dataNA, dataWihtoutNA) 
-
-stepdays2 <- aggregate(data2["steps"], by = data2["date"], FUN = sum)
-
-plot3 <- ggplot(stepdays2, aes(x = steps)) + geom_histogram(binwidth = 1000,
-        color = "White", fill = "green3") + ggtitle("Total Steps Taken per Day") + 
-        theme(plot.title = element_text(face="bold")) +
-        xlab("Steps Taken") + ylab ("Count")
-
-print(plot3)
-```
+![plot of chunk filled_missing_values](figure/filled_missing_values-1.png) 
 
 There are a total of **2304** missing values (NA) in the dataset.
 The missing step values were filled with the mean value for that 5-minute interval.
@@ -174,33 +139,5 @@ print(plot4)
 ```
 
 
-```{r, weekdays, echo=FALSE, fig.path='figure/'}
-data2$weekday1 <- weekdays(as.POSIXlt(data2$date))
-for(i in 1:nrow(data2)){
-        if(data2$weekday1[i] == "Saturday" | data2$weekday1[i] == "Sunday"){
-                data2$weekday[i]  <- "weekend"
-        }
-        else{
-                data2$weekday[i] <- "weekday"
-        }
-}
-
-weekday_data <- subset(data2[data2$weekday == "weekday", ])
-weekend_data <- subset(data2[data2$weekday == "weekend", ])
-
-weekdayinterval <- aggregate(weekday_data["steps"], by = weekday_data["interval"], FUN = mean)
-weekday <- rep("weekday",288)
-weekdayinterval <- cbind(weekdayinterval, weekday)
-weekendinterval <- aggregate(weekend_data["steps"], by = weekend_data["interval"], FUN = mean)
-weekday <- rep("weekend", 288)
-weekendinterval <- cbind(weekendinterval, weekday)
-stepsinterval2 <- rbind(weekdayinterval,weekendinterval)
-
-plot4 <- ggplot(stepsinterval2, aes(x = interval, y = steps)) +
-        geom_line(color="green3") + xlab("5-minute Interval") + ylab("Average Steps Taken") + 
-        ggtitle("Average Steps Taken by 5-minute Interval") + theme(plot.title = element_text(face="bold")) + 
-        facet_grid(weekday ~ .)
-
-print(plot4)
-```
+![plot of chunk weekdays](figure/weekdays-1.png) 
 
