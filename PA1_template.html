@@ -234,6 +234,10 @@ print(plot1)
 
 <p><strong>For the total number of steps taken per day:</strong>  </p>
 
+<pre><code class="r">mean_steps = round(mean(stepdays$steps), 2)
+median_steps = round(median(stepdays$steps), 2)
+</code></pre>
+
 <ul>
 <li><strong>Mean:</strong> 10766.19</li>
 <li><strong>Median:</strong> 10765</li>
@@ -320,7 +324,7 @@ weekendinterval &lt;- cbind(weekendinterval, weekday)
 stepsinterval2 &lt;- rbind(weekdayinterval,weekendinterval)
 
 plot4 &lt;- ggplot(stepsinterval2, aes(x = interval, y = steps)) +
-        geom_line(color=&quot;blue&quot;) + xlab(&quot;5-minute Interval&quot;) + ylab(&quot;Average Steps Taken&quot;) + 
+        geom_line(color=&quot;green3&quot;) + xlab(&quot;5-minute Interval&quot;) + ylab(&quot;Average Steps Taken&quot;) + 
         ggtitle(&quot;Average Steps Taken by 5-minute Interval&quot;) + theme(plot.title = element_text(face=&quot;bold&quot;)) + 
         facet_grid(weekday ~ .)
 

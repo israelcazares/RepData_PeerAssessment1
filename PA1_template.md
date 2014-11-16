@@ -19,6 +19,8 @@ stepdays <- aggregate(dataWihtoutNA["steps"], by = dataWihtoutNA["date"], FUN = 
 
 Make a histogram of the total number of steps taken each day
 
+
+
 ```r
 library(ggplot2)
 
@@ -36,6 +38,10 @@ Calculate and report the mean and median total number of steps taken per day
 **For the total number of steps taken per day:**  
 
 
+```r
+mean_steps = round(mean(stepdays$steps), 2)
+median_steps = round(median(stepdays$steps), 2)
+```
 
 - **Mean:** 10766.19
 - **Median:** 10765
@@ -44,6 +50,8 @@ Calculate and report the mean and median total number of steps taken per day
 ## What is the average daily activity pattern?
 
 Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+
+
 
 ```r
 stepsinterval <- aggregate(dataWihtoutNA["steps"], by = dataWihtoutNA["interval"], FUN = mean)
@@ -67,6 +75,8 @@ max_interval <- stepsinterval[index, "interval"]
 
 
 ## Imputing missing values
+
+
 
 ```r
 dataNA <- data[apply(is.na(data), 1, any),]
@@ -101,6 +111,8 @@ round(median(stepdays2$steps), 2)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
+
+
 ```r
 data2$weekday1 <- weekdays(as.POSIXlt(data2$date))
 for(i in 1:nrow(data2)){
@@ -124,13 +136,12 @@ weekendinterval <- cbind(weekendinterval, weekday)
 stepsinterval2 <- rbind(weekdayinterval,weekendinterval)
 
 plot4 <- ggplot(stepsinterval2, aes(x = interval, y = steps)) +
-        geom_line(color="blue") + xlab("5-minute Interval") + ylab("Average Steps Taken") + 
+        geom_line(color="green3") + xlab("5-minute Interval") + ylab("Average Steps Taken") + 
         ggtitle("Average Steps Taken by 5-minute Interval") + theme(plot.title = element_text(face="bold")) + 
         facet_grid(weekday ~ .)
 
 print(plot4)
 ```
-
 
 ![plot of chunk weekdays](figure/weekdays-1.png) 
 

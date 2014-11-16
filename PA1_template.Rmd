@@ -19,17 +19,8 @@ stepdays <- aggregate(dataWihtoutNA["steps"], by = dataWihtoutNA["date"], FUN = 
 
 Make a histogram of the total number of steps taken each day
 
-```r
-library(ggplot2)
 
-plot1 <- ggplot(stepdays, aes(x = steps)) + geom_histogram(binwidth = 1000, color = "White", fill = "green3") + 
-        ggtitle("Total Steps Taken per Day") + theme(plot.title = element_text(face="bold")) + xlab("Steps Taken") + 
-        ylab ("Count")
-
-print(plot1)
-```
-
-```{r, steps_per_day, echo=FALSE, fig.path='figure/'}
+```{r, steps_per_day, echo=TRUE, fig.path='figure/'}
 
 library(ggplot2)
 
@@ -44,7 +35,7 @@ Calculate and report the mean and median total number of steps taken per day
 
 **For the total number of steps taken per day:**  
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
 
 mean_steps = round(mean(stepdays$steps), 2)
 median_steps = round(median(stepdays$steps), 2)
@@ -59,17 +50,8 @@ median_steps = round(median(stepdays$steps), 2)
 
 Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```r
-stepsinterval <- aggregate(dataWihtoutNA["steps"], by = dataWihtoutNA["interval"], FUN = mean)
 
-plot2 <- ggplot(stepsinterval, aes(x = interval, y = steps)) + geom_line(color="green3")+ 
-        xlab("5-minute Interval") + ylab("Average Steps Taken") + ggtitle("Average Steps Taken by 5-minute Interval") +
-        theme(plot.title = element_text(face="bold")) 
-
-print(plot2)
-```
-
-```{r, steps_interval, echo=FALSE, fig.path='figure/'}
+```{r, steps_interval, echo=TRUE, fig.path='figure/'}
 stepsinterval <- aggregate(dataWihtoutNA["steps"], by = dataWihtoutNA["interval"], FUN = mean)
 
 plot2 <- ggplot(stepsinterval, aes(x = interval, y = steps)) + geom_line(color="green3")+ 
@@ -90,22 +72,8 @@ max_interval <- stepsinterval[index, "interval"]
 
 ## Imputing missing values
 
-```r
-dataNA <- data[apply(is.na(data), 1, any),]
-dataNA$steps <- stepsinterval$steps[match(dataNA$interval, stepsinterval$interval)]
-data2 <- rbind(dataNA, dataWihtoutNA) 
 
-stepdays2 <- aggregate(data2["steps"], by = data2["date"], FUN = sum)
-
-plot3 <- ggplot(stepdays2, aes(x = steps)) + geom_histogram(binwidth = 1000,
-        color = "White", fill = "green3") + ggtitle("Total Steps Taken per Day") + 
-        theme(plot.title = element_text(face="bold")) +
-        xlab("Steps Taken") + ylab ("Count")
-
-print(plot3)
-```
-
-```{r, filled_missing_values, echo=FALSE, fig.path='figure/'}
+```{r, filled_missing_values, echo=TRUE, fig.path='figure/'}
 dataNA <- data[apply(is.na(data), 1, any),]
 dataNA$steps <- stepsinterval$steps[match(dataNA$interval, stepsinterval$interval)]
 data2 <- rbind(dataNA, dataWihtoutNA) 
@@ -136,38 +104,8 @@ round(median(stepdays2$steps), 2)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```r
-data2$weekday1 <- weekdays(as.POSIXlt(data2$date))
-for(i in 1:nrow(data2)){
-        if(data2$weekday1[i] == "Saturday" | data2$weekday1[i] == "Sunday"){
-                data2$weekday[i]  <- "weekend"
-        }
-        else{
-                data2$weekday[i] <- "weekday"
-        }
-}
 
-weekday_data <- subset(data2[data2$weekday == "weekday", ])
-weekend_data <- subset(data2[data2$weekday == "weekend", ])
-
-weekdayinterval <- aggregate(weekday_data["steps"], by = weekday_data["interval"], FUN = mean)
-weekday <- rep("weekday",288)
-weekdayinterval <- cbind(weekdayinterval, weekday)
-weekendinterval <- aggregate(weekend_data["steps"], by = weekend_data["interval"], FUN = mean)
-weekday <- rep("weekend", 288)
-weekendinterval <- cbind(weekendinterval, weekday)
-stepsinterval2 <- rbind(weekdayinterval,weekendinterval)
-
-plot4 <- ggplot(stepsinterval2, aes(x = interval, y = steps)) +
-        geom_line(color="blue") + xlab("5-minute Interval") + ylab("Average Steps Taken") + 
-        ggtitle("Average Steps Taken by 5-minute Interval") + theme(plot.title = element_text(face="bold")) + 
-        facet_grid(weekday ~ .)
-
-print(plot4)
-```
-
-
-```{r, weekdays, echo=FALSE, fig.path='figure/'}
+```{r, weekdays, echo=TRUE, fig.path='figure/'}
 data2$weekday1 <- weekdays(as.POSIXlt(data2$date))
 for(i in 1:nrow(data2)){
         if(data2$weekday1[i] == "Saturday" | data2$weekday1[i] == "Sunday"){
